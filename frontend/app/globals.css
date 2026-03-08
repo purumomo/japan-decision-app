@@ -235,6 +235,53 @@ h1 {
   gap: 16px;
 }
 
+.mobile-stepper {
+  display: none;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  gap: 10px;
+}
+
+.mobile-stepper-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.mobile-stepper-title {
+  color: var(--muted);
+}
+
+.mobile-stepper-current {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.mobile-stepper-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mobile-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.mobile-dot.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: rgba(246, 196, 83, 0.6);
+}
+
 .card {
   background: var(--card);
   border-radius: 18px;
@@ -618,6 +665,15 @@ button {
 }
 
 @media (max-width: 800px) {
+  .stepper {
+    display: none;
+  }
+
+  .mobile-stepper {
+    display: flex;
+    flex-direction: column;
+  }
+
   .grid-2,
   .grid-3,
   .summary-grid,
@@ -628,5 +684,62 @@ button {
 
   .bar-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    background: radial-gradient(circle at top, #1d2145, var(--bg));
+  }
+
+  .app-shell {
+    padding: 24px 16px 48px;
+  }
+
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .hero {
+    gap: 16px;
+  }
+
+  .hero-card,
+  .card,
+  .stepper {
+    padding: 16px;
+  }
+
+  .score-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primary,
+  .ghost,
+  .step {
+    width: 100%;
+  }
+
+  .breakdown-head,
+  .breakdown-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-row {
+    gap: 6px;
+  }
+
+  .panel {
+    scroll-margin-top: 96px;
   }
 }

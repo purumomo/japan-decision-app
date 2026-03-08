@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
 
@@ -503,6 +503,7 @@ export default function Home() {
   const [lang, setLang] = useState('zh');
   const [data, setData] = useState(defaultData);
   const [activeStep, setActiveStep] = useState(0);
+  const panelRef = useRef(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -554,6 +555,14 @@ export default function Home() {
   }, [includeDetour]);
 
   const stepKey = steps[activeStep];
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth > 800) return;
+    if (stepKey !== 'summary') return;
+    if (!panelRef.current) return;
+    panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [activeStep, stepKey]);
 
   const update = (section, key, value) => {
     setData((prev) => ({
@@ -711,7 +720,28 @@ export default function Home() {
           </div>
         </aside>
 
-        <div className="panel">
+        <div className="panel" ref={panelRef}>
+          <div className="mobile-stepper">
+            <div className="mobile-stepper-head">
+              <span className="mobile-stepper-title">{t.workflow}</span>
+              <span className="mobile-stepper-current">
+                {activeStep + 1}/{steps.length} · {t.steps[stepKey]}
+              </span>
+            </div>
+            <div className="mobile-stepper-dots">
+              {steps.map((key, idx) => (
+                <button
+                  key={key}
+                  className={`mobile-dot ${idx === activeStep ? 'active' : ''}`}
+                  onClick={() => setActiveStep(idx)}
+                  aria-label={`${t.workflow} ${idx + 1}`}
+                />
+              ))}
+            </div>
+            <div className="progress">
+              <div className="progress-bar" style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }} />
+            </div>
+          </div>
           {stepKey === 'intro' && (
             <div className="card">
               <h2>{t.steps.intro}</h2>
