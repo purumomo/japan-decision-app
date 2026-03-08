@@ -1227,7 +1227,7 @@ export default function Home() {
                     <div className="breakdown">
                       <div className="summary-title">{t.breakdownTitle}</div>
                       <div className="note">{t.breakdownNote}</div>
-                      <BreakdownTable breakdown={result.breakdown} />
+                      <BreakdownRadar breakdown={result.breakdown} t={t} />
                     </div>
                   )}
                 </div>
@@ -1388,30 +1388,94 @@ function Bar({ label, value, width, tone }) {
   );
 }
 
-function BreakdownTable({ breakdown }) {
+function BreakdownRadar({ breakdown, t }) {
   const jp = breakdown.japan || {};
   const rt = breakdown.return || {};
   const third = breakdown.third || {};
-  const rows = Array.from(
+  const keys = Array.from(
     new Set([...Object.keys(jp), ...Object.keys(rt), ...Object.keys(third)])
   );
+  const ranked = keys
+    .map((key) => ({
+      key,
+      score: Math.max(Math.abs(jp[key] ?? 0), Math.abs(rt[key] ?? 0), Math.abs(third[key] ?? 0))
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 7)
+    .map((item) => item.key);
+  const axes = ranked.length >= 3 ? ranked : keys;
+  const size = 320;
+  const center = size / 2;
+  const radius = 120;
+  const levels = 4;
+
+  const maxByKey = axes.reduce((acc, key) => {
+    acc[key] = Math.max(
+      1,
+      Math.abs(jp[key] ?? 0),
+      Math.abs(rt[key] ?? 0),
+      Math.abs(third[key] ?? 0)
+    );
+    return acc;
+  }, {});
+
+  const buildPoints = (series) =>
+    axes
+      .map((key, idx) => {
+        const angle = (Math.PI * 2 * idx) / axes.length - Math.PI / 2;
+        const value = Math.abs(series[key] ?? 0);
+        const r = (value / maxByKey[key]) * radius;
+        const x = center + r * Math.cos(angle);
+        const y = center + r * Math.sin(angle);
+        return `${x},${y}`;
+      })
+      .join(' ');
+
+  const labelPositions = axes.map((key, idx) => {
+    const angle = (Math.PI * 2 * idx) / axes.length - Math.PI / 2;
+    const x = center + (radius + 24) * Math.cos(angle);
+    const y = center + (radius + 24) * Math.sin(angle);
+    return { key, x, y };
+  });
 
   return (
-    <div className="breakdown-table">
-      <div className="breakdown-head">
-        <span>维度</span>
-        <span>日本</span>
-        <span>回国</span>
-        <span>第三国</span>
+    <div className="radar-wrap">
+      <div className="radar-legend">
+        <span className="legend-dot japan" />
+        <span>{t.analysisLegend.japan}</span>
+        <span className="legend-dot return" />
+        <span>{t.analysisLegend.return}</span>
+        <span className="legend-dot third" />
+        <span>{t.analysisLegend.third}</span>
       </div>
-      {rows.map((key) => (
-        <div key={key} className="breakdown-row">
-          <span className="breakdown-key">{key}</span>
-          <span>{formatNum(jp[key])}</span>
-          <span>{formatNum(rt[key])}</span>
-          <span>{formatNum(third[key])}</span>
-        </div>
-      ))}
+      <svg viewBox={`0 0 ${size} ${size}`} className="radar">
+        {[...Array(levels)].map((_, i) => {
+          const r = ((i + 1) / levels) * radius;
+          const points = axes
+            .map((_, idx) => {
+              const angle = (Math.PI * 2 * idx) / axes.length - Math.PI / 2;
+              const x = center + r * Math.cos(angle);
+              const y = center + r * Math.sin(angle);
+              return `${x},${y}`;
+            })
+            .join(' ');
+          return <polygon key={r} points={points} className="radar-grid" />;
+        })}
+        {axes.map((_, idx) => {
+          const angle = (Math.PI * 2 * idx) / axes.length - Math.PI / 2;
+          const x = center + radius * Math.cos(angle);
+          const y = center + radius * Math.sin(angle);
+          return <line key={idx} x1={center} y1={center} x2={x} y2={y} className="radar-axis" />;
+        })}
+        <polygon points={buildPoints(jp)} className="radar-shape japan" />
+        <polygon points={buildPoints(rt)} className="radar-shape return" />
+        <polygon points={buildPoints(third)} className="radar-shape third" />
+        {labelPositions.map((label) => (
+          <text key={label.key} x={label.x} y={label.y} className="radar-label">
+            {getAnalysisLabel(label.key, t)}
+          </text>
+        ))}
+      </svg>
     </div>
   );
 }

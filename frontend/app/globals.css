@@ -719,6 +719,66 @@ button {
   margin-top: 16px;
 }
 
+.radar-wrap {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radar-legend {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 6px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 220px;
+}
+
+.radar {
+  width: 100%;
+  max-width: 360px;
+  align-self: center;
+}
+
+.radar-grid {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.radar-axis {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.radar-shape {
+  fill-opacity: 0.25;
+  stroke-width: 2;
+}
+
+.radar-shape.japan {
+  fill: #6ae6b5;
+  stroke: #6ae6b5;
+}
+
+.radar-shape.return {
+  fill: #ffb66d;
+  stroke: #ffb66d;
+}
+
+.radar-shape.third {
+  fill: #b88bff;
+  stroke: #b88bff;
+}
+
+.radar-label {
+  fill: var(--muted);
+  font-size: 10px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
 .breakdown-table {
   margin-top: 12px;
   display: grid;
