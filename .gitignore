@@ -1,0 +1,13 @@
+# dependencies
+frontend/node_modules/
+backend/venv/
+
+# OS / editor
+.DS_Store
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# logs
+*.log
