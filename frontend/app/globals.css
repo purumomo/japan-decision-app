@@ -569,6 +569,135 @@ button {
   margin-bottom: 8px;
 }
 
+.analysis {
+  margin-top: 16px;
+}
+
+.analysis-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.analysis-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.analysis-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.analysis-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.ring {
+  --p1: 34;
+  --p2: 33;
+  --p3: 33;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 8px auto 12px;
+  background: conic-gradient(
+    #6ae6b5 0 calc(var(--p1) * 1%),
+    #ffb66d calc(var(--p1) * 1%) calc((var(--p1) + var(--p2)) * 1%),
+    #b88bff calc((var(--p1) + var(--p2)) * 1%) 100%
+  );
+  position: relative;
+}
+
+.ring::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.analysis-legend {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 6px 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
+.legend-dot.japan {
+  background: #6ae6b5;
+}
+
+.legend-dot.return {
+  background: #ffb66d;
+}
+
+.legend-dot.third {
+  background: #b88bff;
+}
+
+.driver-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.driver-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 46px;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.driver-label {
+  color: var(--text);
+}
+
+.driver-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.driver-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.driver-fill.positive {
+  background: linear-gradient(90deg, #6ae6b5, #3cc6ff);
+}
+
+.driver-fill.negative {
+  background: linear-gradient(90deg, #ff9c8d, #ff7b6b);
+}
+
+.driver-fill.neutral {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.driver-value {
+  text-align: right;
+  color: var(--muted);
+}
+
 .result-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -679,6 +808,10 @@ button {
   .summary-grid,
   .result-grid,
   .path-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-grid {
     grid-template-columns: 1fr;
   }
 

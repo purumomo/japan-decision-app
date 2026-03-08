@@ -32,6 +32,34 @@ const translations = {
     error: '请求失败',
     breakdownTitle: '评分拆解',
     breakdownNote: '以下为各维度对分数的贡献（已按权重折算）。',
+    analysisTitle: '分析图表',
+    analysisTendency: '综合倾向',
+    analysisWeights: '权重分布',
+    analysisDrivers: '关键驱动',
+    analysisDriversNote: '按贡献度排序（绝对值）',
+    analysisLegend: {
+      japan: '日本',
+      return: '回国',
+      third: '第三国'
+    },
+    analysisLabels: {
+      money: '收入/成本',
+      growth: '职业成长',
+      life: '生活质量',
+      family: '家庭因素',
+      identity: '身份/归属',
+      risk: '风险偏好',
+      industry: '行业前景',
+      network: '行业人脉',
+      options: '局势下选择空间',
+      visa_type_bonus: '签证类型加分',
+      location_bonus: '城市类型加分',
+      iron_bowl_bonus: '铁饭碗加分',
+      avg_base: '基础平均',
+      risk_tolerance: '风险容忍度',
+      consider_third: '第三国意愿',
+      debt_penalty: '负债惩罚'
+    },
     weightIntro: '请分配你在决策中最看重的因素。系统会按比例归一化，用于比较日本与回国方案。',
     fxRate: '实时汇率',
     fxLoading: '获取中...',
@@ -177,6 +205,34 @@ const translations = {
     error: 'リクエスト失敗',
     breakdownTitle: 'スコア内訳',
     breakdownNote: '各要素がスコアに与える寄与（重み込み）を表示。',
+    analysisTitle: '分析チャート',
+    analysisTendency: '総合傾向',
+    analysisWeights: '重み分布',
+    analysisDrivers: '主要ドライバー',
+    analysisDriversNote: '寄与度の大きい順（絶対値）',
+    analysisLegend: {
+      japan: '日本',
+      return: '帰国',
+      third: '第三国'
+    },
+    analysisLabels: {
+      money: '収入/コスト',
+      growth: 'キャリア成長',
+      life: '生活品質',
+      family: '家庭要因',
+      identity: '帰属意識',
+      risk: 'リスク選好',
+      industry: '業界見通し',
+      network: '人脈',
+      options: '選択肢の幅',
+      visa_type_bonus: 'ビザ加点',
+      location_bonus: '都市タイプ加点',
+      iron_bowl_bonus: '安定職加点',
+      avg_base: '基礎平均',
+      risk_tolerance: 'リスク許容度',
+      consider_third: '第三国志向',
+      debt_penalty: '負債ペナルティ'
+    },
     weightIntro: '意思決定で重視する要素の比重を設定してください。比率で正規化され、日本案と帰国案の比較に使われます。',
     fxRate: 'リアルタイム為替',
     fxLoading: '取得中...',
@@ -322,6 +378,34 @@ const translations = {
     error: 'Request failed',
     breakdownTitle: 'Score Breakdown',
     breakdownNote: 'Contribution of each factor (weight-adjusted).',
+    analysisTitle: 'Analysis Charts',
+    analysisTendency: 'Overall Tilt',
+    analysisWeights: 'Weight Mix',
+    analysisDrivers: 'Key Drivers',
+    analysisDriversNote: 'Sorted by contribution (absolute).',
+    analysisLegend: {
+      japan: 'Japan',
+      return: 'Return',
+      third: 'Third Country'
+    },
+    analysisLabels: {
+      money: 'Income/Cost',
+      growth: 'Career Growth',
+      life: 'Quality of Life',
+      family: 'Family',
+      identity: 'Identity',
+      risk: 'Risk',
+      industry: 'Industry',
+      network: 'Network',
+      options: 'Options',
+      visa_type_bonus: 'Visa Bonus',
+      location_bonus: 'Location Bonus',
+      iron_bowl_bonus: 'Iron Bowl Bonus',
+      avg_base: 'Base Avg',
+      risk_tolerance: 'Risk Tolerance',
+      consider_third: 'Third Country Intent',
+      debt_penalty: 'Debt Penalty'
+    },
     weightIntro: 'Set the importance of each factor. We normalize by proportion and use it to compare Japan vs return plans.',
     fxRate: 'Live FX',
     fxLoading: 'Loading...',
@@ -622,6 +706,39 @@ export default function Home() {
       diff: Math.round(diff * 10) / 10
     };
   }, [data, normalizedWeights]);
+
+  const scoreChart = useMemo(() => {
+    if (!result?.scores) return null;
+    const values = [
+      { key: 'japan', value: result.scores.japan },
+      { key: 'return', value: result.scores.return },
+      { key: 'third', value: result.scores.third }
+    ];
+    const min = Math.min(...values.map((v) => v.value));
+    const adjusted = values.map((v) => ({ ...v, adj: v.value - min + 1 }));
+    const total = adjusted.reduce((sum, v) => sum + v.adj, 0) || 1;
+    return adjusted.map((v) => ({
+      ...v,
+      percent: Math.round((v.adj / total) * 100)
+    }));
+  }, [result]);
+
+  const driverChart = useMemo(() => {
+    if (!result?.scores || !result?.breakdown) return null;
+    const sortedScores = Object.entries(result.scores).sort((a, b) => b[1] - a[1]);
+    const topKey = sortedScores[0]?.[0] || 'japan';
+    const breakdown = result.breakdown[topKey] || {};
+    const items = Object.entries(breakdown)
+      .map(([key, value]) => ({ key, value }))
+      .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
+      .slice(0, 6);
+    const maxAbs = Math.max(...items.map((item) => Math.abs(item.value)), 1);
+    return {
+      topKey,
+      maxAbs,
+      items
+    };
+  }, [result]);
 
   const canNext = () => activeStep < steps.length - 1;
   const canPrev = () => activeStep > 0;
@@ -1004,6 +1121,67 @@ export default function Home() {
                 <div className="result">
                   <h3>{t.recommendation}：{result.recommendation.title}</h3>
                   <p>{result.recommendation.summary}</p>
+                  {scoreChart && driverChart && (
+                    <div className="analysis">
+                      <div className="summary-title">{t.analysisTitle}</div>
+                      <div className="analysis-grid">
+                        <div className="analysis-card">
+                          <div className="analysis-title">{t.analysisTendency}</div>
+                          <div
+                            className="ring"
+                            style={{
+                              '--p1': String(scoreChart[0].percent),
+                              '--p2': String(scoreChart[1].percent),
+                              '--p3': String(scoreChart[2].percent)
+                            }}
+                          />
+                          <div className="analysis-legend">
+                            <span className="legend-dot japan" />
+                            <span>{t.analysisLegend.japan}: {result.scores.japan.toFixed(1)}</span>
+                            <span className="legend-dot return" />
+                            <span>{t.analysisLegend.return}: {result.scores.return.toFixed(1)}</span>
+                            <span className="legend-dot third" />
+                            <span>{t.analysisLegend.third}: {result.scores.third.toFixed(1)}</span>
+                          </div>
+                        </div>
+                        <div className="analysis-card">
+                          <div className="analysis-title">{t.analysisDrivers}</div>
+                          <div className="analysis-note">{t.analysisDriversNote}</div>
+                          <div className="driver-list">
+                            {driverChart.items.map((item) => (
+                              <div key={item.key} className="driver-row">
+                                <span className="driver-label">{getAnalysisLabel(item.key, t)}</span>
+                                <div className="driver-track">
+                                  <div
+                                    className={`driver-fill ${item.value >= 0 ? 'positive' : 'negative'}`}
+                                    style={{ width: `${(Math.abs(item.value) / driverChart.maxAbs) * 100}%` }}
+                                  />
+                                </div>
+                                <span className="driver-value">{item.value.toFixed(1)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="analysis-card">
+                          <div className="analysis-title">{t.analysisWeights}</div>
+                          <div className="driver-list">
+                            {getTopWeights(normalizedWeights, t).map((item) => (
+                              <div key={item.label} className="driver-row">
+                                <span className="driver-label">{item.label}</span>
+                                <div className="driver-track">
+                                  <div
+                                    className="driver-fill neutral"
+                                    style={{ width: `${item.value * 100}%` }}
+                                  />
+                                </div>
+                                <span className="driver-value">{Math.round(item.value * 100)}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="result-grid">
                     <div>
                       <div className="summary-title">{t.actions}</div>
@@ -1163,6 +1341,23 @@ function SummaryList({ weights, t }) {
       ))}
     </div>
   );
+}
+
+function getTopWeights(weights, t) {
+  const items = [
+    { label: t.labels.weightMoney, value: weights.money },
+    { label: t.labels.weightGrowth, value: weights.growth },
+    { label: t.labels.weightLife, value: weights.life },
+    { label: t.labels.weightFamily, value: weights.family },
+    { label: t.labels.weightIdentity, value: weights.identity },
+    { label: t.labels.weightRisk, value: weights.risk },
+    { label: t.labels.weightIndustry, value: weights.industry }
+  ];
+  return items.sort((a, b) => b.value - a.value).slice(0, 5);
+}
+
+function getAnalysisLabel(key, t) {
+  return t.analysisLabels?.[key] || key;
 }
 
 function ScoreBars({ scores, quick, t }) {
