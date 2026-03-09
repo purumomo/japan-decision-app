@@ -69,13 +69,15 @@ const translations = {
       intro: '起点与目标',
       profile: '个人画像',
       weights: '优先级权重',
-      japan: '日本方案输入',
-      ret: '回国方案输入',
+      japan: '留在日本的表现评分',
+      ret: '回国后的表现评分',
       constraints: '约束与风险',
       detour: '特殊分支',
       options: '策略与时间线',
       summary: '汇总与建议'
     },
+    japanDesc: '请根据你在日本继续发展的现实情况给出评分（1-10），用于与回国/第三国对比。',
+    returnDesc: '请根据你回国后的现实情况给出评分（1-10），用于与留日/第三国对比。',
     labels: {
       stage: '当前阶段',
       target: '决定窗口期（多久内要定去留）',
@@ -103,6 +105,32 @@ const translations = {
         risk: '衡量对不确定性与风险容忍度的重要性。',
         industry: '衡量行业景气度、就业稳定性与未来空间的重要性。'
       },
+      weightHint: {
+        money: ['0=不看重收入与成本差异', '10=极看重净收益'],
+        growth: ['0=对成长不敏感', '10=非常看重成长'],
+        life: ['0=对生活质量不敏感', '10=非常看重生活质量'],
+        family: ['0=家庭因素影响小', '10=家庭因素非常重要'],
+        identity: ['0=身份/归属感影响小', '10=身份/归属感非常重要'],
+        risk: ['0=非常保守', '10=非常愿意承担风险'],
+        industry: ['0=对行业前景不敏感', '10=非常看重行业前景']
+      },
+      jpHint: {
+        growth: ['1=成长空间很小', '10=成长空间很大'],
+        wlb: ['1=非常忙/压力大', '10=非常平衡/轻松'],
+        visa: ['1=非常不稳定', '10=非常稳定'],
+        network: ['1=人脉很弱', '10=人脉很强'],
+        language: ['1=沟通困难', '10=沟通非常顺畅'],
+        env: ['1=适应感很差', '10=非常适应/舒适'],
+        options: ['1=选择空间很小', '10=选择空间很大'],
+        industry: ['1=行业低迷', '10=行业前景很好']
+      },
+      rtHint: {
+        growth: ['1=成长空间很小', '10=成长空间很大'],
+        family: ['1=家庭支持很少', '10=家庭支持很强'],
+        stress: ['1=压力很小', '10=压力很大'],
+        network: ['1=人脉很弱', '10=人脉很强'],
+        industry: ['1=行业低迷', '10=行业前景很好']
+      },
       jpSalary: '税前年薪(万日元)',
       jpCost: '年生活成本(万日元)',
       jpTenThousand: '万日元',
@@ -127,14 +155,24 @@ const translations = {
       familyUrgent: '家庭紧急需求',
       healthIssue: '健康因素',
       savingsMonths: '可支撑月数',
+      savingsHint: '可动用存款 ÷ 每月支出 = 可支撑月数',
       debt: '负债压力(万)',
       resetCost: '回国职业重置成本(1-10)',
+      resetCostHint: ['1=几乎无需重置', '10=需要大幅重置/转行'],
       unlimited: '无限期',
       thirdCountry: '是否考虑第三国',
       riskTolerance: '风险容忍度(1-10)',
       timeline: '时间线',
       planStudy: '是否准备技能升级',
-      shortReturn: '是否需要短期回国处理'
+      shortReturn: '是否需要短期回国处理',
+      optionsHint: {
+        thirdCountry: '是否有考虑过第三国方案（例如转去其他国家工作/读书）',
+        riskTolerance: '你对不确定性与风险的接受程度',
+        riskToleranceHint: ['1=非常保守', '10=非常激进'],
+        timeline: '你希望在多久内做出最终决定',
+        planStudy: '是否计划通过进修/转职提升竞争力',
+        shortReturn: '是否需要短期回国处理家庭或事务'
+      }
     },
     options: {
       stage: {
@@ -242,13 +280,15 @@ const translations = {
       intro: 'スタートと目的',
       profile: '個人プロフィール',
       weights: '優先度の重み',
-      japan: '日本案入力',
-      ret: '帰国案入力',
+      japan: '日本に残る場合の評価',
+      ret: '帰国後の評価',
       constraints: '制約とリスク',
       detour: '特別分岐',
       options: '戦略とタイムライン',
       summary: 'まとめと提案'
     },
+    japanDesc: '日本で継続する現状を1〜10で評価し、帰国/第三国と比較します。',
+    returnDesc: '帰国後の現状を1〜10で評価し、留日/第三国と比較します。',
     labels: {
       stage: '現在の段階',
       target: '決定ウィンドウ（いつまでに去就を決めるか）',
@@ -276,6 +316,32 @@ const translations = {
         risk: '不確実性への許容度の重要度。',
         industry: '業界の景気と安定性の重要度。'
       },
+      weightHint: {
+        money: ['0=収入/コスト差を重視しない', '10=純利益を最重視'],
+        growth: ['0=成長に敏感でない', '10=成長を最重視'],
+        life: ['0=生活品質に敏感でない', '10=生活品質を最重視'],
+        family: ['0=家族要因の影響が小さい', '10=家族要因が非常に重要'],
+        identity: ['0=帰属意識の影響が小さい', '10=帰属意識が非常に重要'],
+        risk: ['0=とても保守的', '10=リスクを取れる'],
+        industry: ['0=業界見通しに敏感でない', '10=業界見通しを最重視']
+      },
+      jpHint: {
+        growth: ['1=成長余地が小さい', '10=成長余地が大きい'],
+        wlb: ['1=非常に忙しい/高ストレス', '10=とてもバランス良い'],
+        visa: ['1=非常に不安定', '10=非常に安定'],
+        network: ['1=人脈が弱い', '10=人脈が強い'],
+        language: ['1=コミュニケーション困難', '10=非常にスムーズ'],
+        env: ['1=適応感が低い', '10=非常に適応している'],
+        options: ['1=選択肢が少ない', '10=選択肢が多い'],
+        industry: ['1=業界が低迷', '10=業界見通しが良い']
+      },
+      rtHint: {
+        growth: ['1=成長余地が小さい', '10=成長余地が大きい'],
+        family: ['1=家族支援が少ない', '10=家族支援が強い'],
+        stress: ['1=ストレスが低い', '10=ストレスが高い'],
+        network: ['1=人脈が弱い', '10=人脈が強い'],
+        industry: ['1=業界が低迷', '10=業界見通しが良い']
+      },
       jpSalary: '年収(万円)',
       jpCost: '年間生活費(万円)',
       jpTenThousand: '万円',
@@ -300,14 +366,24 @@ const translations = {
       familyUrgent: '家庭の緊急性',
       healthIssue: '健康要因',
       savingsMonths: '維持可能月数',
+      savingsHint: '利用可能な貯蓄 ÷ 月間支出 = 維持可能月数',
       debt: '負債(万)',
       resetCost: 'キャリア再編コスト(1-10)',
+      resetCostHint: ['1=ほぼ再編不要', '10=大幅な再編/転職が必要'],
       unlimited: '無期限',
       thirdCountry: '第三国を検討',
       riskTolerance: 'リスク許容(1-10)',
       timeline: 'タイムライン',
       planStudy: 'スキル強化',
-      shortReturn: '短期帰国が必要'
+      shortReturn: '短期帰国が必要',
+      optionsHint: {
+        thirdCountry: '第三国への移動（就職/留学）を検討しているか',
+        riskTolerance: '不確実性への許容度',
+        riskToleranceHint: ['1=とても保守的', '10=とても積極的'],
+        timeline: 'いつまでに最終判断したいか',
+        planStudy: '学習/転職で競争力を上げる計画があるか',
+        shortReturn: '短期帰国で用事を済ませる必要があるか'
+      }
     },
     options: {
       stage: {
@@ -415,13 +491,15 @@ const translations = {
       intro: 'Start & Goal',
       profile: 'Profile',
       weights: 'Priority Weights',
-      japan: 'Japan Inputs',
-      ret: 'Return Inputs',
+      japan: 'Japan Stay Performance',
+      ret: 'Return Performance',
       constraints: 'Constraints & Risks',
       detour: 'Special Branch',
       options: 'Strategy & Timeline',
       summary: 'Summary & Recommendation'
     },
+    japanDesc: 'Rate how staying in Japan performs (1–10) based on your current reality, for comparison with return/third-country.',
+    returnDesc: 'Rate how returning performs (1–10) based on your current reality, for comparison with Japan/third-country.',
     labels: {
       stage: 'Current Stage',
       target: 'Decision window (when to decide stay/return)',
@@ -449,6 +527,32 @@ const translations = {
         risk: 'Importance of uncertainty tolerance.',
         industry: 'Importance of industry outlook and stability.'
       },
+      weightHint: {
+        money: ['0=Not sensitive to income/cost gap', '10=Highly focused on net gain'],
+        growth: ['0=Not sensitive to growth', '10=Very growth-driven'],
+        life: ['0=Not sensitive to life quality', '10=Very life-quality driven'],
+        family: ['0=Family factors matter little', '10=Family factors are critical'],
+        identity: ['0=Identity matters little', '10=Identity is critical'],
+        risk: ['0=Very risk-averse', '10=Very risk-tolerant'],
+        industry: ['0=Not sensitive to industry outlook', '10=Very industry-focused']
+      },
+      jpHint: {
+        growth: ['1=Little growth potential', '10=Very high growth potential'],
+        wlb: ['1=Very busy/high stress', '10=Very balanced'],
+        visa: ['1=Very unstable', '10=Very stable'],
+        network: ['1=Weak network', '10=Strong network'],
+        language: ['1=Communication is hard', '10=Very fluent'],
+        env: ['1=Poor fit', '10=Excellent fit'],
+        options: ['1=Few options', '10=Many options'],
+        industry: ['1=Industry is weak', '10=Industry outlook is strong']
+      },
+      rtHint: {
+        growth: ['1=Little growth potential', '10=Very high growth potential'],
+        family: ['1=Low family support', '10=Strong family support'],
+        stress: ['1=Low stress', '10=High stress'],
+        network: ['1=Weak network', '10=Strong network'],
+        industry: ['1=Industry is weak', '10=Industry outlook is strong']
+      },
       jpSalary: 'Annual Salary (10k JPY)',
       jpCost: 'Annual Cost (10k JPY)',
       jpTenThousand: '10k JPY',
@@ -473,14 +577,24 @@ const translations = {
       familyUrgent: 'Family Urgency',
       healthIssue: 'Health Factors',
       savingsMonths: 'Runway (months)',
+      savingsHint: 'Available savings ÷ monthly expenses = runway months',
       debt: 'Debt (10k)',
       resetCost: 'Career Reset Cost (1-10)',
+      resetCostHint: ['1=Little reset needed', '10=Major reset/transition needed'],
       unlimited: 'Unlimited',
       thirdCountry: 'Consider Third Country',
       riskTolerance: 'Risk Tolerance (1-10)',
       timeline: 'Timeline',
       planStudy: 'Skill Upgrade Plan',
-      shortReturn: 'Need Short Return'
+      shortReturn: 'Need Short Return',
+      optionsHint: {
+        thirdCountry: 'Whether you are considering a third-country route (work/study)',
+        riskTolerance: 'Your tolerance for uncertainty and risk',
+        riskToleranceHint: ['1=Very conservative', '10=Very aggressive'],
+        timeline: 'When you want to make the final decision',
+        planStudy: 'Whether you plan to upskill or pivot',
+        shortReturn: 'Need a short return to handle affairs'
+      }
     },
     options: {
       stage: {
@@ -958,13 +1072,13 @@ export default function Home() {
               <h2>{t.steps.weights}</h2>
               <p>{t.weightIntro}</p>
               <div className="grid-2">
-                <WeightItem label={t.labels.weightMoney} help={t.labels.weightHelp.money} value={data.weights.money} onChange={(v) => update('weights', 'money', v)} />
-                <WeightItem label={t.labels.weightGrowth} help={t.labels.weightHelp.growth} value={data.weights.growth} onChange={(v) => update('weights', 'growth', v)} />
-                <WeightItem label={t.labels.weightLife} help={t.labels.weightHelp.life} value={data.weights.life} onChange={(v) => update('weights', 'life', v)} />
-                <WeightItem label={t.labels.weightFamily} help={t.labels.weightHelp.family} value={data.weights.family} onChange={(v) => update('weights', 'family', v)} />
-                <WeightItem label={t.labels.weightIdentity} help={t.labels.weightHelp.identity} value={data.weights.identity} onChange={(v) => update('weights', 'identity', v)} />
-                <WeightItem label={t.labels.weightRisk} help={t.labels.weightHelp.risk} value={data.weights.risk} onChange={(v) => update('weights', 'risk', v)} />
-                <WeightItem label={t.labels.weightIndustry} help={t.labels.weightHelp.industry} value={data.weights.industry} onChange={(v) => update('weights', 'industry', v)} />
+                <WeightItem label={t.labels.weightMoney} help={t.labels.weightHelp.money} hint={t.labels.weightHint.money} value={data.weights.money} onChange={(v) => update('weights', 'money', v)} />
+                <WeightItem label={t.labels.weightGrowth} help={t.labels.weightHelp.growth} hint={t.labels.weightHint.growth} value={data.weights.growth} onChange={(v) => update('weights', 'growth', v)} />
+                <WeightItem label={t.labels.weightLife} help={t.labels.weightHelp.life} hint={t.labels.weightHint.life} value={data.weights.life} onChange={(v) => update('weights', 'life', v)} />
+                <WeightItem label={t.labels.weightFamily} help={t.labels.weightHelp.family} hint={t.labels.weightHint.family} value={data.weights.family} onChange={(v) => update('weights', 'family', v)} />
+                <WeightItem label={t.labels.weightIdentity} help={t.labels.weightHelp.identity} hint={t.labels.weightHint.identity} value={data.weights.identity} onChange={(v) => update('weights', 'identity', v)} />
+                <WeightItem label={t.labels.weightRisk} help={t.labels.weightHelp.risk} hint={t.labels.weightHint.risk} value={data.weights.risk} onChange={(v) => update('weights', 'risk', v)} />
+                <WeightItem label={t.labels.weightIndustry} help={t.labels.weightHelp.industry} hint={t.labels.weightHint.industry} value={data.weights.industry} onChange={(v) => update('weights', 'industry', v)} />
               </div>
               <div className="note">{t.weightsTotal}：{weightTotal}</div>
             </div>
@@ -973,6 +1087,7 @@ export default function Home() {
           {stepKey === 'japan' && (
             <div className="card">
               <h2>{t.steps.japan}</h2>
+              <p className="note">{t.japanDesc}</p>
               <div className="fx-row">
                 <span className="fx-label">{t.fxRate}</span>
                 <span className="fx-value">
@@ -984,20 +1099,20 @@ export default function Home() {
               <div className="grid-3">
                 <InputNumber label={t.labels.jpSalary} value={data.japan.salary} max={3000} step={1} onChange={(v) => update('japan', 'salary', v)} hint={`${formatNum(data.japan.salary * fxRate)} ${t.labels.cnTenThousand}`} />
                 <InputNumber label={t.labels.jpCost} value={data.japan.cost} max={2000} step={1} onChange={(v) => update('japan', 'cost', v)} hint={`${formatNum(data.japan.cost * fxRate)} ${t.labels.cnTenThousand}`} />
-                <RangeInput label={t.labels.jpGrowth} value={data.japan.growth} onChange={(v) => update('japan', 'growth', v)} />
+                <RangeInput label={t.labels.jpGrowth} hint={t.labels.jpHint.growth} value={data.japan.growth} onChange={(v) => update('japan', 'growth', v)} />
               </div>
               <div className="grid-3">
-                <RangeInput label={t.labels.jpWlb} value={data.japan.wlb} onChange={(v) => update('japan', 'wlb', v)} />
-                <RangeInput label={t.labels.jpVisa} value={data.japan.visaStability} onChange={(v) => update('japan', 'visaStability', v)} />
-                <RangeInput label={t.labels.jpNetwork} value={data.japan.network} onChange={(v) => update('japan', 'network', v)} />
+                <RangeInput label={t.labels.jpWlb} hint={t.labels.jpHint.wlb} value={data.japan.wlb} onChange={(v) => update('japan', 'wlb', v)} />
+                <RangeInput label={t.labels.jpVisa} hint={t.labels.jpHint.visa} value={data.japan.visaStability} onChange={(v) => update('japan', 'visaStability', v)} />
+                <RangeInput label={t.labels.jpNetwork} hint={t.labels.jpHint.network} value={data.japan.network} onChange={(v) => update('japan', 'network', v)} />
               </div>
               <div className="grid-3">
-                <RangeInput label={t.labels.jpLanguage} help={t.labels.languageHelp} value={data.japan.languageComfort} onChange={(v) => update('japan', 'languageComfort', v)} />
-                <RangeInput label={t.labels.jpEnvFit} value={data.japan.environmentFit} onChange={(v) => update('japan', 'environmentFit', v)} />
-                <RangeInput label={t.labels.jpOptions} value={data.japan.globalOptions} onChange={(v) => update('japan', 'globalOptions', v)} />
+                <RangeInput label={t.labels.jpLanguage} help={t.labels.languageHelp} hint={t.labels.jpHint.language} value={data.japan.languageComfort} onChange={(v) => update('japan', 'languageComfort', v)} />
+                <RangeInput label={t.labels.jpEnvFit} hint={t.labels.jpHint.env} value={data.japan.environmentFit} onChange={(v) => update('japan', 'environmentFit', v)} />
+                <RangeInput label={t.labels.jpOptions} hint={t.labels.jpHint.options} value={data.japan.globalOptions} onChange={(v) => update('japan', 'globalOptions', v)} />
               </div>
               <div className="grid-2">
-                <RangeInput label={t.labels.jpIndustry} value={data.japan.industryOutlook} onChange={(v) => update('japan', 'industryOutlook', v)} />
+                <RangeInput label={t.labels.jpIndustry} hint={t.labels.jpHint.industry} value={data.japan.industryOutlook} onChange={(v) => update('japan', 'industryOutlook', v)} />
                 <SelectYesNo label={t.labels.planStudy} value={data.options.planStudy} onChange={(v) => update('options', 'planStudy', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
               </div>
             </div>
@@ -1006,6 +1121,7 @@ export default function Home() {
           {stepKey === 'ret' && (
             <div className="card">
               <h2>{t.steps.ret}</h2>
+              <p className="note">{t.returnDesc}</p>
               <div className="fx-row">
                 <span className="fx-label">{t.fxRate}</span>
                 <span className="fx-value">
@@ -1017,15 +1133,15 @@ export default function Home() {
               <div className="grid-3">
                 <InputNumber label={t.labels.rtSalary} value={data.return.salary} onChange={(v) => update('return', 'salary', v)} hint={`${formatNum(data.return.salary / fxRate)} ${t.labels.jpTenThousand}`} />
                 <InputNumber label={t.labels.rtCost} value={data.return.cost} onChange={(v) => update('return', 'cost', v)} hint={`${formatNum(data.return.cost / fxRate)} ${t.labels.jpTenThousand}`} />
-                <RangeInput label={t.labels.rtGrowth} value={data.return.growth} onChange={(v) => update('return', 'growth', v)} />
+                <RangeInput label={t.labels.rtGrowth} hint={t.labels.rtHint.growth} value={data.return.growth} onChange={(v) => update('return', 'growth', v)} />
               </div>
               <div className="grid-3">
-                <RangeInput label={t.labels.rtFamily} value={data.return.familySupport} onChange={(v) => update('return', 'familySupport', v)} />
-                <RangeInput label={t.labels.rtStress} value={data.return.marketStress} onChange={(v) => update('return', 'marketStress', v)} />
-                <RangeInput label={t.labels.rtNetwork} value={data.return.network} onChange={(v) => update('return', 'network', v)} />
+                <RangeInput label={t.labels.rtFamily} hint={t.labels.rtHint.family} value={data.return.familySupport} onChange={(v) => update('return', 'familySupport', v)} />
+                <RangeInput label={t.labels.rtStress} hint={t.labels.rtHint.stress} value={data.return.marketStress} onChange={(v) => update('return', 'marketStress', v)} />
+                <RangeInput label={t.labels.rtNetwork} hint={t.labels.rtHint.network} value={data.return.network} onChange={(v) => update('return', 'network', v)} />
               </div>
               <div className="grid-3">
-                <RangeInput label={t.labels.rtIndustry} value={data.return.industryOutlook} onChange={(v) => update('return', 'industryOutlook', v)} />
+                <RangeInput label={t.labels.rtIndustry} hint={t.labels.rtHint.industry} value={data.return.industryOutlook} onChange={(v) => update('return', 'industryOutlook', v)} />
                 <div className="input-block">
                   <label>{t.labels.rtLocation}</label>
                   <select value={data.return.locationType} onChange={(e) => update('return', 'locationType', e.target.value)}>
@@ -1044,11 +1160,11 @@ export default function Home() {
               <div className="grid-3">
                 <SelectYesNo label={t.labels.familyUrgent} value={data.constraints.familyUrgent} onChange={(v) => update('constraints', 'familyUrgent', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
                 <SelectYesNo label={t.labels.healthIssue} value={data.constraints.healthIssue} onChange={(v) => update('constraints', 'healthIssue', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
-                <InputNumber label={t.labels.savingsMonths} value={data.constraints.savingsMonths} onChange={(v) => update('constraints', 'savingsMonths', v)} />
+                <InputNumber label={t.labels.savingsMonths} hint={t.labels.savingsHint} value={data.constraints.savingsMonths} onChange={(v) => update('constraints', 'savingsMonths', v)} />
               </div>
               <div className="grid-2">
                 <InputNumber label={t.labels.debt} value={data.constraints.debt} onChange={(v) => update('constraints', 'debt', v)} />
-                <RangeInput label={t.labels.resetCost} value={data.constraints.careerResetCost} onChange={(v) => update('constraints', 'careerResetCost', v)} />
+                <RangeInput label={t.labels.resetCost} hint={t.labels.resetCostHint} value={data.constraints.careerResetCost} onChange={(v) => update('constraints', 'careerResetCost', v)} />
               </div>
             </div>
           )}
@@ -1068,8 +1184,11 @@ export default function Home() {
             <div className="card">
               <h2>{t.steps.options}</h2>
               <div className="grid-3">
-                <SelectYesNo label={t.labels.thirdCountry} value={data.options.considerThirdCountry} onChange={(v) => update('options', 'considerThirdCountry', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
-                <RangeInput label={t.labels.riskTolerance} value={data.options.riskTolerance} onChange={(v) => update('options', 'riskTolerance', v)} />
+                <div className="input-block">
+                  <SelectYesNo label={t.labels.thirdCountry} value={data.options.considerThirdCountry} onChange={(v) => update('options', 'considerThirdCountry', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
+                  <div className="field-note">{t.labels.optionsHint.thirdCountry}</div>
+                </div>
+                <RangeInput label={t.labels.riskTolerance} hint={t.labels.optionsHint.riskToleranceHint} value={data.options.riskTolerance} onChange={(v) => update('options', 'riskTolerance', v)} />
                 <div className="input-block">
                   <label>{t.labels.timeline}</label>
                   <select value={data.options.timeline} onChange={(e) => update('options', 'timeline', e.target.value)}>
@@ -1077,11 +1196,18 @@ export default function Home() {
                     <option value="6-12">{t.options.timeline.b}</option>
                     <option value="12-24">{t.options.timeline.c}</option>
                   </select>
+                  <div className="field-note">{t.labels.optionsHint.timeline}</div>
                 </div>
               </div>
               <div className="grid-2">
-                <SelectYesNo label={t.labels.planStudy} value={data.options.planStudy} onChange={(v) => update('options', 'planStudy', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
-                <SelectYesNo label={t.labels.shortReturn} value={data.constraints.familyUrgent} onChange={(v) => update('constraints', 'familyUrgent', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
+                <div className="input-block">
+                  <SelectYesNo label={t.labels.planStudy} value={data.options.planStudy} onChange={(v) => update('options', 'planStudy', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
+                  <div className="field-note">{t.labels.optionsHint.planStudy}</div>
+                </div>
+                <div className="input-block">
+                  <SelectYesNo label={t.labels.shortReturn} value={data.constraints.familyUrgent} onChange={(v) => update('constraints', 'familyUrgent', v)} yesLabel={t.options.yes} noLabel={t.options.no} />
+                  <div className="field-note">{t.labels.optionsHint.shortReturn}</div>
+                </div>
               </div>
             </div>
           )}
@@ -1249,7 +1375,7 @@ export default function Home() {
   );
 }
 
-function WeightItem({ label, help, value, onChange }) {
+function WeightItem({ label, help, hint, value, onChange }) {
   return (
     <div className="input-block">
       <label className="label-with-help">
@@ -1261,13 +1387,17 @@ function WeightItem({ label, help, value, onChange }) {
           </span>
         )}
       </label>
+      <div className="range-hint">
+        <span>{hint?.[0] || '0'}</span>
+        <span>{hint?.[1] || '10'}</span>
+      </div>
       <input type="range" min="0" max="10" value={value} onChange={(e) => onChange(Number(e.target.value))} />
       <div className="range-value">{value}</div>
     </div>
   );
 }
 
-function RangeInput({ label, help, value, onChange }) {
+function RangeInput({ label, help, hint, value, onChange }) {
   return (
     <div className="input-block">
       <label className="label-with-help">
@@ -1279,6 +1409,12 @@ function RangeInput({ label, help, value, onChange }) {
           </span>
         )}
       </label>
+      {hint && (
+        <div className="range-hint">
+          <span>{hint[0]}</span>
+          <span>{hint[1]}</span>
+        </div>
+      )}
       <input type="range" min="1" max="10" value={value} onChange={(e) => onChange(Number(e.target.value))} />
       <div className="range-value">{value}</div>
     </div>
